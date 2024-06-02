@@ -1,0 +1,500 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recyclable Types</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+   
+    <div class="container-fluid">
+        <div class="row  border border-color-black p-1">
+            <div class="text-center mt-5 border border-color-black p-5 col-md-4">
+
+                <form method="post" action="/Home/ProcessForm">
+                    <h1 class="p-3">Recyclable Type</h1>
+                    <div class="row">
+
+                        @if (TempData["Message"] != null)
+                        {
+                            <div id="alertMessage" class="alert alert-warning">@TempData["Message"]</div>
+                            <script>
+                                // Fade out the alert after 2 seconds
+                                setTimeout(function () {
+                                    $("#alertMessage").fadeOut("slow");
+                                }, 2000);
+                            </script>
+                        }
+                        @if (TempData["SaveMessage"] != null)
+                        {
+                            <div id="alertMessage" class="alert alert-success">@TempData["SaveMessage"]</div>
+                            <script>
+                                // Fade out the alert after 2 seconds
+                                setTimeout(function () {
+                                    $("#alertMessage").fadeOut("slow");
+                                }, 2000);
+                            </script>
+                        }                       
+                        @if (TempData["ErrorMessage1"] != null)
+                        {
+                            <div id="alertMessage" class="alert alert-danger">@TempData["ErrorMessage1"]</div>
+                            <script>
+                                // Fade out the alert after 2 seconds
+                                setTimeout(function () {
+                                    $("#alertMessage").fadeOut("slow");
+                                }, 2000);
+                            </script>
+                        }
+                        <div class="form-label col-3">
+                            <label for="type">Type:</label>
+                        </div>
+                        <div class="form-group col-9">
+                            <input type="text" class="form-control" id="type" name="type">
+                        </div>
+                    </div>
+                    <div class="row">
+                        @if (TempData["ErrorMessage2"] != null)
+                        {
+                            <div id="alertMessage" class="alert alert-danger">@TempData["ErrorMessage2"]</div>
+                            <script>
+                                // Fade out the alert after 2 seconds
+                                setTimeout(function () {
+                                    $("#alertMessage").fadeOut("slow");
+                                }, 2000);
+                            </script>
+                        }
+                        <div class="form-label col-3">
+                            <label for="rate">Rate:</label>
+                        </div>
+                        <div class="form-group col-9">
+                            <input type="number" class="form-control" id="rate" name="rate" step="0.01">
+                        </div>
+                    </div>
+                    <div class="row">
+                        @if (TempData["ErrorMessage3"] != null)
+                        {
+                            <div id="alertMessage" class="alert alert-danger">@TempData["ErrorMessage3"]</div>
+                            <script>
+                                // Fade out the alert after 2 seconds
+                                setTimeout(function () {
+                                    $("#alertMessage").fadeOut("slow");
+                                }, 2000);
+                            </script>
+                        }
+                        <div class="form-label col-3">
+                            <label for="minKg">MinKg:</label>
+                        </div>
+                        <div class="form-group col-9">
+                            <input type="number" class="form-control" id="minKg" name="minKg" step="0.01">
+                        </div>
+                    </div>
+                    <div class="row">
+                        @if (TempData["ErrorMessag4"] != null)
+                        {
+                            <div id="alertMessage" class="alert alert-danger">@TempData["ErrorMessag4"]</div>
+                            <script>
+                                // Fade out the alert after 2 seconds
+                                setTimeout(function () {
+                                    $("#alertMessage").fadeOut("slow");
+                                }, 2000);
+                            </script>
+                        }
+                        <div class="form-label col-3">
+                            <label for="maxKg">MaxKg:</label>
+                        </div>
+                        <div class="form-group col-9">
+                            <input type="number" class="form-control" id="maxKg" name="maxKg" step="0.01">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <button type="submit" class="btn btn-primary col-6 btn-success">Save</button>
+                        <button type="reset" class="btn btn-primary col-6 btn-warning">Reset</button>
+                    </div>
+                </form>
+            </div>
+            <div class="p-5 col-md-8">
+                <h2>Existing Recyclable Types</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Type</th>
+                            <th>Rate</th>
+                            <th>Action</th> <!-- New column for buttons -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @model Recyclable_App.Controllers.IndexViewModel
+                        @foreach (var item in Model.RecyclableTypes)
+                        {
+                            <tr>                              
+                                <td>@item.Id</td>
+                                <td>@item.Type</td>
+                                <td>@item.Rate</td>
+                                <td>
+                                    <!-- View Button -->
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#@item.Id">
+                                        View
+                                    </button>
+
+
+                                    <!-- Delete Button -->
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#Delmodal">
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <!-- View Modal -->
+                            <div class="modal fade" id="@item.Id" tabindex="-1" aria-labelledby="@item.Id" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="viewModalLabel@item.Id">Recyclable Type Details (@item.Id)</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <!-- Update form -->
+                                            @if (TempData["UpdateMessage"] != null)
+                                            {
+                                                <div id="alertMessage" class="alert alert-success">@TempData["UpdateMessage"]</div>
+                                                <script>
+                                                    // Fade out the alert after 2 seconds
+                                                    setTimeout(function () {
+                                                        $("#alertMessage").fadeOut("slow");
+                                                    }, 2000);
+                                                </script>
+                                            }
+                                            <form method="post" action="/Home/UpdateType/@item.Id">
+                                                <div class="mb-3">
+                                                    <label for="updateType@item.Id" class="form-label">Rate</label>
+                                                    <input type="text" class="form-control" id="updateType@item.Id" name="type" value="@item.Type" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="updateRate@item.Id" class="form-label">Rate</label>
+                                                    <input type="number" class="form-control" id="updateRate@item.Id" name="rate" value="@item.Rate" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="updateMinKg@item.Id" class="form-label">MinKg</label>
+                                                    <input type="number" class="form-control" id="updateMinKg@item.Id" name="minKg" value="@item.MinKg" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="updateMaxKg@item.Id" class="form-label">MaxKg</label>
+                                                    <input type="number" class="form-control" id="updateMaxKg@item.Id" name="maxKg" value="@item.MaxKg" required>
+                                                </div>
+                                                <div class="row">
+                                                    <!-- Center the button and expand to full width -->
+                                                    <button type="submit" class="btn btn-info col-12">Update</button>
+                                                </div>
+
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End of View Modal -->
+                            <!-- View Modal -->
+                            <div class="modal fade" id="Delmodal" tabindex="-1" aria-labelledby="#Delmodal" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="viewModalLabel@item.Id">Delete</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body p-5">
+                                            <p>Are you sure to this this?</p>
+                                        </div>
+                                        <div class="modal-footer col-12">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <form method="post" action="/Home/DeleteTypes/@item.Id" style="display: inline;">
+                                                        <button type="submit" class="btn btn-danger">Yes</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End of View Modal -->
+                        }
+                    </tbody>
+                </table>
+            </div>
+      </div>
+        <div class="row  border border-color-black p-1 mt-5">
+            <div class="text-center mt-5 border border-color-black p-5 col-md-4">
+                <form method="post" action="/Home/ItemForm">
+                    @if (TempData["SaveMessage1"] != null)
+                    {
+                        <div id="alertMessage" class="alert alert-success">@TempData["SaveMessage1"]</div>
+                        <script>
+                            // Fade out the alert after 2 seconds
+                            setTimeout(function () {
+                                $("#alertMessage").fadeOut("slow");
+                            }, 2000);
+                        </script>
+                    }
+                    <h1 class="p-3">Recyclable Item</h1>
+                    <div class="row">
+                        @if (TempData["RecyclableTypeId"] != null)
+                        {
+                            <div class="alert alert-warning">@TempData["RecyclableTypeId"]</div>
+                        }
+                        <!-- Repeat this structure for other alert messages -->
+                    </div>
+                    <div class="row">
+                        <div class="form-label col-4">
+                            <label for="typeDropdown">Recyclable Type:</label>
+                        </div>
+                        <div class="form-group col-8">
+                            <select class="form-control" id="typeDropdown" name="RecyclableTypeId">
+                                <option value="">Select a Type</option>
+                                @foreach (var type in Model.RecyclableTypes)
+                                {
+                                    <option value="@type.Id" data-rate="@type.Rate">@type.Type</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        @if (TempData["Description"] != null)
+                        {
+                            <div class="alert alert-danger">@TempData["Description"]</div>
+                        }
+                        <!-- Repeat this structure for other error messages -->
+                        <div class="form-label col-4">
+                            <label for="Description">Description:</label>
+                        </div>
+                        <div class="form-group col-8">
+                            <textarea class="form-control" id="Description" name="Description"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        @if (TempData["Weight"] != null)
+                        {
+                            <div class="alert alert-danger">@TempData["Weight"]</div>
+                        }
+                        <div class="form-label col-4">
+                            <label for="Weight">Weight:</label>
+                        </div>
+                        <div class="form-group col-8">
+                            <input type="number" class="form-control" id="Weight" name="Weight" step="0.01">
+                        </div>
+                    </div>
+                    <div class="row">
+                        @if (TempData["ComputedRate"] != null)
+                        {
+                            <div class="alert alert-danger">@TempData["ComputedRate"]</div>
+                        }
+                        <div class="form-label col-4">
+                            <label for="ComputedRate">Computed Rate:</label>
+                        </div>
+                        <div class="form-group col-8">
+                            <input type="number" class="form-control" id="ComputedRate" name="ComputedRate" step="0.01" readonly>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <button type="submit" class="btn btn-primary col-6 btn-success">Save</button>
+                        <button type="reset" class="btn btn-primary col-6 btn-warning">Reset</button>
+                    </div>
+                </form>            
+            </div>
+            <div class="p-5 col-md-8">
+                <h2>Existing Recyclable Items</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Weight</th>
+                            <th>Computed Rate</th>
+                            <th>Action</th> <!-- New column for buttons -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.RecyclableItems)
+                        {
+                            <tr>
+                                <td>
+                                    @foreach (var type in Model.RecyclableTypes)
+                                    {
+                                        if (type.Id == item.RecyclableTypeId)
+                                        {
+                                           @type.Type
+                                        }
+                                    }
+                                </td>
+                                <td>@item.Weight</td>
+                                <td>@item.ComputedRate</td>
+                                <td>
+                                    <!-- View Button -->
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#@item.Id">
+                                        View
+                                    </button>
+
+                                    <!-- Delete Button -->
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#DelmodalItem">
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <!-- View Modal -->
+                            <div class="modal fade" id="@item.Id" tabindex="-1" aria-labelledby="@item.Id" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="viewModalLabel@item.Id">Recyclable Type Details</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <!-- Update form -->
+                                            @if (TempData["UpdateMessage1"] != null)
+                                            {
+                                                <div id="alertMessage" class="alert alert-success">@TempData["UpdateMessage1"]</div>
+                                                <script>
+                                                    // Fade out the alert after 2 seconds
+                                                    setTimeout(function () {
+                                                        $("#alertMessage").fadeOut("slow");
+                                                    }, 2000);
+                                                </script>
+                                            }
+                                            <form method="post" action="/Home/UpdateItem/@item.Id">
+                                                <div class="mb-3">
+                                                    <label for="updateRecyclableTypeId@item.Id" class="form-label">Recyclable Type Id</label>
+                                                    <select class="form-control" id="RecyclableTypeId" name="RecyclableTypeId">
+
+                                                        @foreach (var type in Model.RecyclableTypes)
+                                                        {
+                                                            if (type.Id == item.RecyclableTypeId)
+                                                            {
+                                                                <option value="@type.Id" data-rate="@type.Rate">@type.Type</option>
+                                                            }
+                                                        }
+
+                                                        @foreach (var type in Model.RecyclableTypes)
+                                                        {
+                                                            if (type.Id != item.RecyclableTypeId)
+                                                            {
+                                                                <option value="@type.Id" data-rate="@type.Rate">@type.Type</option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="updateDescription@item.Id" class="form-label">Description</label>
+                                                    <textarea class="form-control" id="Description" name="Description" required>@item.Description</textarea>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="updateWeight@item.Id" class="form-label">Weight</label>
+                                                    <input type="number" class="form-control" id="Weight" name="Weight" value="@item.Weight" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="updateComputedRate@item.Id" class="form-label">Computed Rate</label>
+                                                    <input type="number" class="form-control" id="ComputedRate" name="ComputedRate" value="@item.ComputedRate" required readonly>
+                                                </div>
+                                                <div class="row">
+                                                    <!-- Center the button and expand to full width -->
+                                                    <button type="submit" class="btn btn-info col-12">Update</button>
+                                                </div>
+                                            </form>
+                                            <script>
+                                                $(document).ready(function () {
+                                                    // Function to calculate computed rate
+                                                    function calculateComputedRate() {
+                                                        var recyclableTypeId = $("#RecyclableTypeId").val();
+                                                        var weight = $("#Weight").val();
+
+                                                        // Check if both RecyclableTypeId and Weight are not empty
+                                                        if (recyclableTypeId && weight) {
+                                                            var rate = $("#RecyclableTypeId option:selected").data("rate");
+                                                            var computedRate = rate * weight;
+                                                            $("#ComputedRate").val(computedRate);
+                                                        }
+                                                    }
+
+                                                    // Call the function initially
+                                                    calculateComputedRate();
+
+                                                    // Call the function whenever Recyclable Type or Weight changes
+                                                    $("#RecyclableTypeId, #Weight").change(function () {
+                                                        calculateComputedRate();
+                                                    });
+                                                });
+                                            </script>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End of View Modal -->
+                            <!-- View Modal -->
+                            <div class="modal fade" id="DelmodalItem" tabindex="-1" aria-labelledby="#DelmodalItem" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="viewModalLabel@item.Id">Delete</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body p-5">
+                                            <p>Are you sure to this this?</p>
+                                        </div>
+                                        <div class="modal-footer col-12">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <form method="post" action="/Home/DeleteItem/@item.Id" style="display: inline;">
+                                                        <button type="submit" class="btn btn-danger">Yes</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End of View Modal -->
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+    <script>
+        // Add event listener to the select element
+        document.getElementById("typeDropdown").addEventListener("change", function () {
+            // Get the selected type's rate
+            var selectedOption = this.options[this.selectedIndex];
+            var rate = selectedOption.getAttribute("data-rate");
+
+            // Update the computed rate field
+            updateComputedRate(rate);
+        });
+
+        // Function to update the computed rate
+        function updateComputedRate(rate) {
+            var weight = parseFloat(document.getElementById("Weight").value);
+            var computedRate = rate * weight;
+            document.getElementById("ComputedRate").value = computedRate.toFixed(2);
+        }
+
+        // Add event listener to the weight input
+        document.getElementById("Weight").addEventListener("input", function () {
+            // Get the selected type's rate
+            var selectedOption = document.getElementById("typeDropdown").options[document.getElementById("typeDropdown").selectedIndex];
+            var rate = selectedOption.getAttribute("data-rate");
+
+            // Update the computed rate field
+            updateComputedRate(rate);
+        });
+    </script>
+    <!-- Bootstrap JS (jQuery and Popper.js required) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.min.js"></script>
+      <!-- Bootstrap JS (Optional, only if you need Bootstrap JavaScript functionality) -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>
