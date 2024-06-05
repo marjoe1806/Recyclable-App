@@ -1,0 +1,15 @@
+ CCREATE TABLE RecyclableTypes(
+       Id INT IDENTITY(1,1) PRIMARY KEY,
+       Type NVARCHAR(100) NOT NULL,
+       Rate DECIMAL(18, 2) NOT NULL,
+       MinKg DECIMAL(18, 2) NOT NULL,
+       MaxKg DECIMAL(18, 2) NOT NULL
+   );
+
+
+CREATE TABLE RecyclableItems(
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    RecyclableTypeId INT,
+    Description NVARCHAR(150),
+    Weight DECIMAL(18, 2),
+    ComputedRate DECIMAL(18, 2));
