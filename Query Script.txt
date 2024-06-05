@@ -12,4 +12,8 @@ CREATE TABLE RecyclableItems(
     RecyclableTypeId INT,
     Description NVARCHAR(150),
     Weight DECIMAL(18, 2),
+<<<<<<< HEAD
     ComputedRate DECIMAL(18, 2));
+=======
+    ComputedRate DECIMAL(18, 2));
+>>>>>>> 7863600 (App Revision)
